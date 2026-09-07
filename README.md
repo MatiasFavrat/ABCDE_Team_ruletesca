@@ -1,1 +1,0 @@
-# ABCDE_Team_ruletesca
