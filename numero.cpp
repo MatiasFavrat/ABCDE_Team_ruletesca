@@ -20,7 +20,7 @@
 */
 
 void inicializarNumero(Numero &n, int valor, char color){
-
+	return 0;
 }
 
 /**
@@ -56,8 +56,19 @@ int obtenerValor(Numero n){
 * Accede al atributo que contiene el color del objeto y lo retorna.
 * ****************************************************************************************
 */
-char obtenerColor(Numero n){ 
-	return 0; 
+char obtenerColor(Numero n){
+	char ColorObtenido;
+	
+	switch (n.color) {
+	case 'N':
+		ColorObtenido='N';
+	case 'R':
+		ColorObtenido='R';
+	default:
+		ColorObtenido='V'; 
+	}
+	
+	return ColorObtenido; 
 }
 /**
 * ****************************************************************************************
@@ -76,5 +87,13 @@ char obtenerColor(Numero n){
 * ****************************************************************************************
 */
 int obtenerParidad(Numero n){
-	return 0; 
+	int ValorParidad=0;
+	
+	if(n.valor%2==0){
+		ValorParidad=1;	
+	}else if(n.valor%3==0){
+		ValorParidad=2;
+	}
+	
+	return ValorParidad; 
 }

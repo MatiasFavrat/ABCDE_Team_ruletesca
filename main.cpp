@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "numero.h"
 #include "ruleta.h"
