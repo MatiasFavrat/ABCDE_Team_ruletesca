@@ -20,7 +20,8 @@
 */
 
 void inicializarNumero(Numero &n, int valor, char color){
-
+	n.valor=valor;
+	n.color=color;
 }
 
 /**
