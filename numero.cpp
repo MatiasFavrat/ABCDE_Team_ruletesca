@@ -3,99 +3,100 @@
 
 /**
 * ****************************************************************************************
-* Funciï¿½n: inicializarNumero
+* Función: inicializarNumero
 *
-* Parï¿½metros:
-* - Numero &n : Referencia al objeto Numero que serï¿½ inicializado.
-* - int valor : Valor numï¿½rico que se asignarï¿½ al objeto.
-* - char color : Carï¿½cter que representa el color del nï¿½mero.
+* Parámetros:
+* - Numero &n : Referencia al objeto Numero que será inicializado.
+* - int valor : Valor numérico que se asignará al objeto.
+* - char color : Carácter que representa el color del número.
 *
 * Retorna:
-* - void : No retorna ningï¿½n valor.
+* - void : No retorna ningún valor.
 *
-* Descripciï¿½n:
+* Descripción:
 * Inicializa los atributos del parameto Numero con los valores recibidos y valida
 * la consistencia de los datos ingresados.
 * ****************************************************************************************
 */
 
 void inicializarNumero(Numero &n, int valor, char color){
-	n.valor=valor;
-	n.color=color;
-}
-
-/**
-* ****************************************************************************************
-* Funciï¿½n: obtenerValor
-*
-* Parï¿½metros:
-* - Numero n : Objeto Numero del cual se desea obtener el valor numï¿½rico.
-*
-* Retorna:
-* - int : Valor numï¿½rico almacenado en el objeto Numero.
-*
-* Descripciï¿½n:
-* Accede al atributo que contiene el valor numï¿½rico del objeto y lo retorna.
-* ****************************************************************************************
-*/
-
-int obtenerValor(Numero n){
-	int Valor=n.valor; 
-	return Valor; 
-}
-	
-/**
-* ****************************************************************************************
-* Funciï¿½n: obtenerColor
-*
-* Parï¿½metros:
-* - Numero n : Objeto Numero del cual se desea obtener el color.
-*
-* Retorna:
-* - char : Carï¿½cter que representa el color almacenado en el objeto Numero.
-*
-* Descripciï¿½n:
-* Accede al atributo que contiene el color del objeto y lo retorna.
-* ****************************************************************************************
-*/
-char obtenerColor(Numero n){
-	char ColorObtenido;
-	
-	switch (n.color) {
-	case 'N':
-		ColorObtenido='N';
-	case 'R':
-		ColorObtenido='R';
-	default:
-		ColorObtenido='V'; 
+	if (valor < 0 || valor > 36) { 
+		valor = 0;
 	}
 	
-	return ColorObtenido; 
-}
-/**
-* ****************************************************************************************
-* Funciï¿½n: obtenerParidad
-*
-* Parï¿½metros:
-* - Numero n : Objeto Numero cuyo valor numï¿½rico serï¿½ analizado.
-*
-* Retorna:
-* - int : 0 si el valor no es par ni impar, 1 si es par y 2 si es impar.
-*
-* Descripciï¿½n:
-* Analiza el valor numï¿½rico almacenado en el objeto y determina su paridad,
-* retornando 1 para valores pares, 2 para valores impares y 0 cuando el valor
-* no corresponde a una de estas categorï¿½as.
-* ****************************************************************************************
-*/
-int obtenerParidad(Numero n){
-	int ValorParidad=0;
+	if (valor == 0) {
+		color = 'V'; 
+	} else if (color != 'R' && color != 'N') {
+		color = 'N';
+	};
 	
-	if(n.valor%2==0){
-		ValorParidad=1;	
-	}else if(n.valor%3==0){
-		ValorParidad=2;
+	n.valor = valor;
+	n.color = color;
+}
+	
+	/**
+	* ****************************************************************************************
+	* Función: obtenerValor
+	*
+	* Parámetros:
+	* - Numero n : Objeto Numero del cual se desea obtener el valor numérico.
+	*
+	* Retorna:
+	* - int : Valor numérico almacenado en el objeto Numero.
+	*
+	* Descripción:
+	* Accede al atributo que contiene el valor numérico del objeto y lo retorna.
+	* ****************************************************************************************
+	*/
+	
+	int obtenerValor(Numero n){ 
+		return n.valor; 
 	}
-	
-	return ValorParidad; 
-}
+		
+		/**
+		* ****************************************************************************************
+		* Función: obtenerColor
+		*
+		* Parámetros:
+		* - Numero n : Objeto Numero del cual se desea obtener el color.
+		*
+		* Retorna:
+		* - char : Carácter que representa el color almacenado en el objeto Numero.
+		*
+		* Descripción:
+		* Accede al atributo que contiene el color del objeto y lo retorna.
+		* ****************************************************************************************
+		*/
+		char obtenerColor(Numero n){ 
+			return n.color; 
+		}
+			/**
+			* ****************************************************************************************
+			* Función: obtenerParidad
+			*
+			* Parámetros:
+			* - Numero n : Objeto Numero cuyo valor numérico será analizado.
+			*
+			* Retorna:
+			* - int : 0 si el valor no es par ni impar, 1 si es par y 2 si es impar.
+			*
+			* Descripción:
+			* Analiza el valor numérico almacenado en el objeto y determina su paridad,
+			* retornando 1 para valores pares, 2 para valores impares y 0 cuando el valor
+			* no corresponde a una de estas categorías.
+			* ****************************************************************************************
+			*/
+			int obtenerParidad(Numero n){
+				int paridad;
+				
+				if (n.valor == 0) {
+					paridad = 0;
+				} else if (n.valor % 2 == 0) {
+					paridad = 1;
+				} else {
+					paridad = 2;
+				}
+				
+				return paridad; 
+			}
+				

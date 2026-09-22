@@ -1,11 +1,10 @@
-
 #ifndef NUMERO_H
 #define NUMERO_H
 
 struct Numero {
-    int valor;
-    char color;
-
+	int valor;
+	char color;
+	
 };
 
 void inicializarNumero(Numero &n, int valor, char color);
