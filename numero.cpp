@@ -1,19 +1,18 @@
 #include "numero.h"
 
-
 /**
 * ****************************************************************************************
-* Función: inicializarNumero
+* Funciï¿½n: inicializarNumero
 *
-* Parámetros:
-* - Numero &n : Referencia al objeto Numero que será inicializado.
-* - int valor : Valor numérico que se asignará al objeto.
-* - char color : Carácter que representa el color del número.
+* Parï¿½metros:
+* - Numero &n : Referencia al objeto Numero que serï¿½ inicializado.
+* - int valor : Valor numï¿½rico que se asignarï¿½ al objeto.
+* - char color : Carï¿½cter que representa el color del nï¿½mero.
 *
 * Retorna:
-* - void : No retorna ningún valor.
+* - void : No retorna ningï¿½n valor.
 *
-* Descripción:
+* Descripciï¿½n:
 * Inicializa los atributos del parameto Numero con los valores recibidos y valida
 * la consistencia de los datos ingresados.
 * ****************************************************************************************
@@ -36,16 +35,16 @@ void inicializarNumero(Numero &n, int valor, char color){
 	
 	/**
 	* ****************************************************************************************
-	* Función: obtenerValor
+	* Funciï¿½n: obtenerValor
 	*
-	* Parámetros:
-	* - Numero n : Objeto Numero del cual se desea obtener el valor numérico.
+	* Parï¿½metros:
+	* - Numero n : Objeto Numero del cual se desea obtener el valor numï¿½rico.
 	*
 	* Retorna:
-	* - int : Valor numérico almacenado en el objeto Numero.
+	* - int : Valor numï¿½rico almacenado en el objeto Numero.
 	*
-	* Descripción:
-	* Accede al atributo que contiene el valor numérico del objeto y lo retorna.
+	* Descripciï¿½n:
+	* Accede al atributo que contiene el valor numï¿½rico del objeto y lo retorna.
 	* ****************************************************************************************
 	*/
 	
@@ -55,15 +54,15 @@ void inicializarNumero(Numero &n, int valor, char color){
 		
 		/**
 		* ****************************************************************************************
-		* Función: obtenerColor
+		* Funciï¿½n: obtenerColor
 		*
-		* Parámetros:
+		* Parï¿½metros:
 		* - Numero n : Objeto Numero del cual se desea obtener el color.
 		*
 		* Retorna:
-		* - char : Carácter que representa el color almacenado en el objeto Numero.
+		* - char : Carï¿½cter que representa el color almacenado en el objeto Numero.
 		*
-		* Descripción:
+		* Descripciï¿½n:
 		* Accede al atributo que contiene el color del objeto y lo retorna.
 		* ****************************************************************************************
 		*/
@@ -72,18 +71,18 @@ void inicializarNumero(Numero &n, int valor, char color){
 		}
 			/**
 			* ****************************************************************************************
-			* Función: obtenerParidad
+			* Funciï¿½n: obtenerParidad
 			*
-			* Parámetros:
-			* - Numero n : Objeto Numero cuyo valor numérico será analizado.
+			* Parï¿½metros:
+			* - Numero n : Objeto Numero cuyo valor numï¿½rico serï¿½ analizado.
 			*
 			* Retorna:
 			* - int : 0 si el valor no es par ni impar, 1 si es par y 2 si es impar.
 			*
-			* Descripción:
-			* Analiza el valor numérico almacenado en el objeto y determina su paridad,
+			* Descripciï¿½n:
+			* Analiza el valor numï¿½rico almacenado en el objeto y determina su paridad,
 			* retornando 1 para valores pares, 2 para valores impares y 0 cuando el valor
-			* no corresponde a una de estas categorías.
+			* no corresponde a una de estas categorï¿½as.
 			* ****************************************************************************************
 			*/
 			int obtenerParidad(Numero n){
