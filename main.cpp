@@ -10,7 +10,6 @@ const bool InicioSesion=false;
 
 int main() {
 	
-	
 	Numero nums[37];
 	inicializarRuleta(nums);
 	bool i=1;
@@ -19,5 +18,6 @@ int main() {
 		cin >> i;
 		girarRuleta(nums);	
 	}
+	
     return 0;
 }
