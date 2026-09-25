@@ -6,27 +6,6 @@
 
 #include <windows.h>
 
-/**
-* ****************************************************************************************
-* Función: IniciarNSesion
-*
-* Parámetros:
-* - bool &InicioSesion : Referencia a un valor booleano que indica si ya se ha iniciado sesión previamente.
-* - Jugador jugadores[] : Arreglo de objetos de tipo Jugador donde se cargarán los datos de los participantes.
-* - int &cant : Referencia a una variable entera que representa la cantidad de jugadores cargados.
-*
-* Retorna:
-* - bool : Retorna el estado actualizado del indicador de inicio de sesión.
-*
-* Descripción:
-* Verifica si la sesión no ha sido iniciada previamente; en caso afirmativo, procede a cargar los jugadores 
-* y marca la sesión como activa, de lo contrario muestra un mensaje de advertencia indicando que la sesión ya fue iniciada.
-* ****************************************************************************************
-*/
-
-
-
-	
 /*		void JugarSesion(Jugador jugadores[], int cant, Numero ruleta[37], 
 						 Numero historial[], int &totalGiros){
 			
@@ -35,11 +14,11 @@
 			while(seguir && !hayJugadorEnQuiebra(jugadores, cant) && totalGiros < MAX_JUGADAS){
 				
 				pedirApuestas(jugadores, cant);
-				// PENDIENTE Paso 3: "No va más!" + girar + guardar en historial
+				// PENDIENTE Paso 3: "No va mï¿½s!" + girar + guardar en historial
 				// PENDIENTE Paso 4: liquidar + mostrar estado
 				// PENDIENTE Paso 5: preguntar si seguir -> actualizar 'seguir'
 			}
-			// PENDIENTE: mensaje de cierre según por qué terminó
+			// PENDIENTE: mensaje de cierre segï¿½n por quï¿½ terminï¿½
 		}*/
 
 void MostratHistorial(){
@@ -50,26 +29,23 @@ void MostratHistorial(){
 
 /**
 * ****************************************************************************************
-* Función: MenuPrincioal
+* Funciï¿½n: MenuPrincioal
 *
-* Parámetros:
-* - bool &InicioSesion : Referencia a un valor booleano que indica si se ha iniciado sesión o el estado de la misma.
-* - Jugador jugadores[] : Arreglo de objetos de tipo Jugador que almacena la información de los participantes.
+* Parï¿½metros:
+* - bool &InicioSesion : Referencia a un valor booleano que indica si se ha iniciado sesiï¿½n o el estado de la misma.
+* - Jugador jugadores[] : Arreglo de objetos de tipo Jugador que almacena la informaciï¿½n de los participantes.
 * - int &cant : Referencia a una variable entera que representa la cantidad actual de jugadores.
 *
 * Retorna:
-* - void : No retorna ningún valor.
+* - void : No retorna ningï¿½n valor.
 *
-* Descripción:
-* Despliega el menú principal de la aplicación "La Ruletesca" en la consola, permitiendo 
-* al usuario navegar entre distintas opciones (como iniciar una nueva sesión, consultar 
-* el estado de los jugadores, ver historiales y estadísticas, entre otras) mediante un bucle 
-* que se repite hasta que se selecciona la opción de salida.
+* Descripciï¿½n:
+* Despliega el menï¿½ principal de la aplicaciï¿½n "La Ruletesca" en la consola, permitiendo 
+* al usuario navegar entre distintas opciones (como iniciar una nueva sesiï¿½n, consultar 
+* el estado de los jugadores, ver historiales y estadï¿½sticas, entre otras) mediante un bucle 
+* que se repite hasta que se selecciona la opciï¿½n de salida.
 * ****************************************************************************************
 */
-
-
-
 
 void MenuPrincipal(Jugador jugadores[], int &cant){
 	char op;
@@ -103,7 +79,7 @@ void MenuPrincipal(Jugador jugadores[], int &cant){
 					}
 					
 				} else {
-					cout << "Ya hay una sesion en curso ¿Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
+					cout << "Ya hay una sesion en curso ï¿½Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
 					int opcion=-1;
 					while(opcion<1 or opcion>3){
 						cin >> opcion;

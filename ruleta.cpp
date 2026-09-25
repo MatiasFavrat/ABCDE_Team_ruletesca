@@ -4,19 +4,19 @@
 #include "AnimacionRuleta.h"
 
 /*
-Función: inicializarRuleta
-
-Parámetros:
-- Número ruleta[]: Arreglo con 37 posiciones que representa la ruleta a inicializar.
-
-Retorna: 
-- void: No retorna ningún valor.
-
-Descripción:
-Recorrelas 37 casillas de la ruleta emparejando cada índice con el color oficial
-correspondiente (siguiendo el orden real de una ruleta europea) e inicializa cada
-posición con inicializarNumero. Además inicializa la semilla del generador de
-números aleatorios usando la hora actual.
+* Funciï¿½n: inicializarRuleta
+* 
+* Parï¿½metros:
+* - Nï¿½mero ruleta[]: Arreglo con 37 posiciones que representa la ruleta a inicializar.
+* 
+* Retorna: 
+* - void: No retorna ningï¿½n valor.
+* 
+* Descripciï¿½n:
+* Recorrelas 37 casillas de la ruleta emparejando cada ï¿½ndice con el color oficial
+* correspondiente (siguiendo el orden real de una ruleta europea) e inicializa cada
+* posiciï¿½n con inicializarNumero. Ademï¿½s inicializa la semilla del generador de
+* nï¿½meros aleatorios usando la hora actual.
 */
 
 void inicializarRuleta(Numero ruleta[37]){
@@ -30,14 +30,14 @@ void inicializarRuleta(Numero ruleta[37]){
 }
 	
 /*
-Función: girarRuleta
-
-Parámetros:
-- Numero ruleta[]:  Arreglo de 37 posiciones que representala ruleta ya inicializada.
-
-Descripción:
-Genera un índice al azar entre 0 y 36 y retorna una copia del Numero de la ruleta
-que se encuentra en esa posición, simulando el resultado de un giro real.
+* Funciï¿½n: girarRuleta
+* 
+* Parï¿½metros:
+* - Numero ruleta[]:  Arreglo de 37 posiciones que representala ruleta ya inicializada.
+* 
+* Descripciï¿½n:
+* Genera un ï¿½ndice al azar entre 0 y 36 y retorna una copia del Numero de la ruleta
+* que se encuentra en esa posiciï¿½n, simulando el resultado de un giro real.
 */
 	
 Numero girarRuleta(Numero ruleta[37]){
