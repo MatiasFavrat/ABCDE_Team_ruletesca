@@ -96,7 +96,6 @@ void MenuPrincipal(Jugador jugadores[], int &cant){
 					inicializarSesion(nuevaSesion,jugadores,cant);
 					
 					
-					
 					cicloDeJuego(ruleta,jugadores,cant,nuevaSesion,condicionDeCiclo);
 					if(condicionDeCiclo==3){
 						sesiones[sesionActual]=nuevaSesion;
