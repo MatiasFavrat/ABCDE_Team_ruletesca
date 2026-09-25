@@ -15,7 +15,7 @@ const double PI     = 3.1415;
 const double ASPECT = 2.0;   // una celda de consola es ~2 veces mas alta que ancha
 
 const string CODIGO[] = {
-	"\033[0m",                    // FONDO
+	"\033[48;5;22m",              // FONDO
 		"\033[48;5;160;38;5;231m",    // ROJO
 		"\033[48;5;16;38;5;231m",     // NEGRO
 		"\033[48;5;34;38;5;231m",     // VERDE (el cero)
@@ -181,6 +181,8 @@ void imprimirLienzo() {
 
 // ---------- Giro con animacion ----------
 void girar(int target) {
+	
+	limpiarLienzo();
 	int k = 0;  // casilla ganadora
 	for(int i=0;i<37;i++) { 
 		if(RUEDA[i]==target){

@@ -2,6 +2,9 @@
 #include "MenuPrincipal.h"
 #include "jugador.h"
 #include "ruleta.h"
+#include "Sesion.h"
+
+#include <windows.h>
 
 /**
 * ****************************************************************************************
@@ -21,53 +24,8 @@
 * ****************************************************************************************
 */
 
-bool IniciarNSesion(bool &InicioSesion, Jugador jugadores[], int &cant){
-	bool sesionNueva = false;
-	if(InicioSesion == false){
-		cargarJugadores(jugadores, cant);
-		InicioSesion = true;
-		sesionNueva = true;
-	} else {
-		cout << "¡Ya iniciaste sesion!" << endl;
-	}
-	return sesionNueva;
-}
-	
-	void pedirApuestas(Jugador jugadores[], int cant){
-		for(int i = 0; i < cant; i++){
-			cout << "\n--- Turno de " << jugadores[i].nombre 
-				<< " (fichas: " << jugadores[i].fichas << ") ---" << endl;
-			
-			int fichas;
-			do {
-				cout << "Fichas a apostar: ";
-				cin >> fichas;
-			} while(fichas <= 0 || fichas > jugadores[i].fichas);
-			
-			int tipo;
-			do {
-				cout << "Tipo de apuesta (1-Numero, 2-Color, 3-Par, 4-Impar): ";
-				cin >> tipo;
-			} while(tipo < 1 || tipo > 4);
-			
-			int numero = -1;
-			char color = ' ';
-			
-			if(tipo == 1){
-				do {
-					cout << "Numero apostado (0-36): ";
-					cin >> numero;
-				} while(numero < 0 || numero > 36);
-			} else if(tipo == 2){
-				do {
-					cout << "Color apostado (R-Rojo, N-Negro): ";
-					cin >> color;
-				} while(color != 'R' && color != 'N');
-			}
-			
-			registrarApuesta(jugadores[i], fichas, tipo, numero, color);
-		}
-	}	
+
+
 	
 /*		void JugarSesion(Jugador jugadores[], int cant, Numero ruleta[37], 
 						 Numero historial[], int &totalGiros){
@@ -88,9 +46,7 @@ void MostratHistorial(){
 	//Funcion con el flujo del juego(creo...)
 }
 
-void MostrarEstadistaSesion(){
-    
-}
+
 
 /**
 * ****************************************************************************************
@@ -113,34 +69,68 @@ void MostrarEstadistaSesion(){
 */
 
 
-void MenuPrincipal(bool &InicioSesion, Jugador jugadores[], int &cant){
+
+
+void MenuPrincipal(Jugador jugadores[], int &cant){
 	char op;
+	int sesionActual=-1;
+	int ultimaSesion=-1;
+	Sesion sesiones[5];
+	
+	Numero ruleta[37];
+	inicializarRuleta(ruleta);
+	int condicionDeCiclo=1;
+	
 	do{
+		system("cls");
 		cout << "La Ruletesca\n==========================\n1.- Iniciar nueva sesion de ruleta\n2.- Consultar estado de jugadores\n3.- Mostrar historial de giros\n4.- Mostrar estadasticas de la sesion\n5.- Ordenar sesiones segun cantidad de giros (Funcionalidad en Desarrollo)\n6.- Analizar sesiones historicas (Funcionalidad en Desarrollo)\n7.- Carga de Archivo (Funcionalidad en Desarrollo)\nX.- Salir de la aplicacion\nIngrese una opcion: ";
 		cin >> op;
 		switch(op){
 			case '1':
-				if(!InicioSesion){
-					IniciarNSesion(InicioSesion, jugadores, cant);
-					//JugarSesion(jugadores, cant, ruleta, historial, totalGiros);
+				if(sesionActual==-1){
+					condicionDeCiclo=1;
+					
+					Sesion nuevaSesion;
+					ultimaSesion++;
+					sesionActual=ultimaSesion;
+					inicializarSesion(nuevaSesion,jugadores,cant);
+					
+					
+					
+					cicloDeJuego(ruleta,jugadores,cant,nuevaSesion,condicionDeCiclo);
+					if(condicionDeCiclo==3){
+						sesiones[sesionActual]=nuevaSesion;
+						sesionActual=-1;
+					}
+					
 				} else {
-					cout << "Ya iniciaste sesion." << endl;
+					cout << "Ya hay una sesion en curso ¿Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
+					int opcion=-1;
+					while(opcion<1 or opcion>3){
+						cin >> opcion;
+						if(opcion==1){
+							condicionDeCiclo=1;
+							cicloDeJuego(ruleta,jugadores,cant,sesiones[sesionActual],condicionDeCiclo);
+						}else if(opcion==3){
+							sesionActual=-1;
+						}
+					}
 				}
 				break;
 			case '2':
-				if(InicioSesion){
+				if(sesionActual!=-1){
 					mostrarEstadoJugadores(jugadores,cant);
 				}
 				break;
 			case '3':
-				if(InicioSesion){
+				if(sesionActual!=-1){
 					MostratHistorial();
 				}
 				break;
 				
 			case '4':
-				if(InicioSesion){
-					MostrarEstadistaSesion();
+				if(sesionActual!=-1){
+					//MostrarEstadistaSesion();
 				}
 				break;
 			case '5':

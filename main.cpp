@@ -3,21 +3,16 @@
 #include "ruleta.h"
 #include "jugador.h"
 #include "MenuPrincipal.h"
-
+#include "consola.h"
 using namespace std;
 
-const bool InicioSesion=false;
+bool InicioSesion=false;
 
 int main() {
-	
-	Numero nums[37];
-	inicializarRuleta(nums);
-	bool i=1;
-	while(i){
-		
-		cin >> i;
-		girarRuleta(nums);	
-	}
+	inicializarConsola();
+	Jugador jugadores[10];
+	int cj = 2;
+	MenuPrincipal(jugadores,cj);
 	
     return 0;
 }

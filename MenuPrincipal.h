@@ -4,7 +4,7 @@
 #include "numero.h"
 #include "jugador.h"
 
-void MenuPrincipal(bool &InicioSesion, Jugador jugadores[], int &cant); //MP
+void MenuPrincipal(Jugador jugadores[], int &cant); //MP
 bool IniciarNSesion(bool &InicioSesion, Jugador jugadores[], int &cant); //1
 void MostratHistorial(); //3
 void MostrarEstadistaSesion(); //4

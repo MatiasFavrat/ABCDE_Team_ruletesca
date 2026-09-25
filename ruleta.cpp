@@ -29,16 +29,16 @@ void inicializarRuleta(Numero ruleta[37]){
 	srand(time(NULL));
 }
 	
-	/*
-	Función: girarRuleta
-	
-	Parámetros:
-	- Numero ruleta[]:  Arreglo de 37 posiciones que representala ruleta ya inicializada.
-	
-	Descripción:
-	Genera un índice al azar entre 0 y 36 y retorna una copia del Numero de la ruleta
-	que se encuentra en esa posición, simulando el resultado de un giro real.
-	*/
+/*
+Función: girarRuleta
+
+Parámetros:
+- Numero ruleta[]:  Arreglo de 37 posiciones que representala ruleta ya inicializada.
+
+Descripción:
+Genera un índice al azar entre 0 y 36 y retorna una copia del Numero de la ruleta
+que se encuentra en esa posición, simulando el resultado de un giro real.
+*/
 	
 Numero girarRuleta(Numero ruleta[37]){
     int r = rand() % 37;
