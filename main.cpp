@@ -9,7 +9,7 @@ using namespace std;
 bool InicioSesion=false;
 
 int main() {
-	inicializarConsola();
+	//inicializarConsola();
 	Jugador jugadores[10];
 	int cj = 2;
 	MenuPrincipal(jugadores,cj);
