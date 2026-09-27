@@ -1,10 +1,12 @@
 #include <iostream>
+#include <iomanip>
+
 #include "consola.h"
 
 using namespace std;
 
 
-#ifndef _WIN32
+#ifdef _WIN32
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0A00 // Windows 10 o superior
 #endif
@@ -16,6 +18,8 @@ using namespace std;
 #endif
 
 void inicializarConsola() {
+	
+	cout << fixed << setprecision(2);
 #ifdef _WIN32
 	// Activa la interpretacion de codigos ANSI
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);

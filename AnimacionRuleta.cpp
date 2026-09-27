@@ -15,14 +15,14 @@ const double PI = 3.1415;
 const double ASPECT = 2.0; // una celda de consola es ~2 veces mas alta que ancha
 
 const string CODIGO[] = {
-	"\033[48;5;22m",		   // FONDO
-	"\033[48;5;160;38;5;231m", // ROJO
-	"\033[48;5;16;38;5;231m",  // NEGRO
-	"\033[48;5;34;38;5;231m",  // VERDE (el cero)
-	"\033[48;5;220;38;5;16m",  // ORO   (aro exterior)
-	"\033[48;5;94;38;5;230m",  // MADERA
-	"\033[48;5;137;38;5;16m",  // CONO  (centro)
-	"\033[48;5;231;38;5;16m"   // BOLA
+	"\033[48;5;22;38;5;231m",		   // FONDO 0
+	"\033[48;5;160;38;5;231m", // ROJO 1
+	"\033[48;5;16;38;5;231m",  // NEGRO 2
+	"\033[48;5;34;38;5;231m",  // VERDE (el cero) 3
+	"\033[48;5;220;38;5;16m",  // ORO   (aro exterior) 4
+	"\033[48;5;94;38;5;230m",  // MADERA 5
+	"\033[48;5;137;38;5;16m",  // CONO  (centro) 6
+	"\033[48;5;231;38;5;16m"   // BOLA 7
 };
 
 // ---------- Geometria (en unidades de fila) ----------
@@ -73,7 +73,7 @@ bool esRojo(int n)
 
 /**
  * ****************************************************************************************
- * Función: tintaDe
+ * Función: colorDe
  *
  * Parámetros:
  * - int n : Número de la ruleta del cual se desea conocer el código de color.
@@ -86,7 +86,7 @@ bool esRojo(int n)
  * ****************************************************************************************
  */
 
-int tintaDe(int n)
+int colorDe(int n)
 {
 	int c;
 	if (n == 0)
@@ -301,7 +301,7 @@ void dibujarRueda(double angBola, bool mostrarBola)
 				{
 					// Corona de casillas
 					int k = int(floor(fmod(ang + PASO / 2, 2 * PI) / PASO)) % cantCasillas;
-					pintar(x, y, ' ', tintaDe(RUEDA[k]));
+					pintar(x, y, ' ', colorDe(RUEDA[k]));
 				}
 				else if (r <= R_ORO)
 				{
@@ -319,7 +319,7 @@ void dibujarRueda(double angBola, bool mostrarBola)
 	for (int k = 0; k < cantCasillas; ++k)
 	{
 		int n = RUEDA[k];
-		escribir(R_TEXTO, k * PASO, to_string(n), tintaDe(n));
+		escribir(R_TEXTO, k * PASO, to_string(n), colorDe(n));
 	}
 
 	// 3) La bola sobre la pista dorada
@@ -366,6 +366,15 @@ void imprimirLienzo()
 	}
 	cout << salida;
 }
+
+void imprimirNumero(int n){
+	cout << CODIGO[colorDe(n)] << " " << n << " " << CODIGO[0];
+}
+
+void imprimirStringConColor(string str ,int colorPaleta){
+	cout << CODIGO[colorPaleta]  << str << CODIGO[0];
+}	
+	
 
 // ---------- Giro con animacion ----------
 
@@ -422,7 +431,7 @@ void girar(int target)
 	int n = RUEDA[k];
 
 	cout << "\n  Resultado: "
-		 << CODIGO[tintaDe(n)] << " "
+		 << CODIGO[colorDe(n)] << " "
 		 << n << " "
 		 << CODIGO[0] << "    ";
 

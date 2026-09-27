@@ -118,11 +118,23 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 				}
 			}
 		}
+		
+		system("cls");
+		
 		cout << "NO VA MAS!" << endl;
 		Numero resultado = girarRuleta(ruleta);
 		sesionActual.Resultados[sesionActual.cantidadGiros] = resultado;
 		sesionActual.cantidadGiros++;
+		
 		liquidarApuestas(jugadores, cantidadJugadores, resultado);
+		
+		
+		for (int i = 0; i < cantidadJugadores; i++)
+		{
+			sesionActual.jugadoresParticipantes[i] = jugadores[i];
+		}
+		
+		
 		mostrarEstadoJugadores(jugadores, cantidadJugadores);
 		if (hayJugadorEnQuiebra(jugadores, cantidadJugadores))
 		{

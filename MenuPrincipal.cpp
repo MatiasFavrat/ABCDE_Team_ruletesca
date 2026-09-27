@@ -3,29 +3,68 @@
 #include "jugador.h"
 #include "ruleta.h"
 #include "Sesion.h"
+#include "AnimacionRuleta.h"
+#include "numero.h"
 
 #include <windows.h>
 
-/*		void JugarSesion(Jugador jugadores[], int cant, Numero ruleta[37], 
-						 Numero historial[], int &totalGiros){
-			
-			bool seguir = true;
-			
-			while(seguir && !hayJugadorEnQuiebra(jugadores, cant) && totalGiros < MAX_JUGADAS){
-				
-				pedirApuestas(jugadores, cant);
-				// PENDIENTE Paso 3: "No va mï¿½s!" + girar + guardar en historial
-				// PENDIENTE Paso 4: liquidar + mostrar estado
-				// PENDIENTE Paso 5: preguntar si seguir -> actualizar 'seguir'
-			}
-			// PENDIENTE: mensaje de cierre segï¿½n por quï¿½ terminï¿½
-		}*/
 
-void MostratHistorial(){
-	//Funcion con el flujo del juego(creo...)
+
+void MostratHistorial(Sesion &sesion){
+	int cgiros = sesion.cantidadGiros;
+	cout << "Historial de resultados:\n";
+	for(int i=0;i<cgiros;i++) { 
+		int n=obtenerValor(sesion.Resultados[i]);
+		cout << "["<<i<<"]:";
+		imprimirNumero(n);
+		cout << endl;
+	}
 }
 
-
+void MostrarEstadistaSesion(Sesion &sesion){
+	int cPares=0 ,cImpares=0 ,cRojos=0, cNegros=0, cZero=0;
+	
+	int cgiros = sesion.cantidadGiros;
+	for(int i=0;i<cgiros;i++) { 
+		Numero resultado=sesion.Resultados[i];
+		int valor=obtenerValor(sesion.Resultados[i]);
+		if(valor==0){
+			cZero++;
+		}else{
+			if(obtenerColor(resultado)=='R'){
+				cRojos++;
+			}else{
+				cNegros++;
+			}
+			if(obtenerParidad(resultado)==1){
+				cPares++;
+			}else{
+				cImpares++;
+			}
+		}
+	}
+	cout << '\n';
+	imprimirStringConColor("=========================================================",4); cout << '\n';
+	imprimirStringConColor("Estadisticas de la sesion",4) << '\n';
+	imprimirStringConColor("=========================================================",4); cout << '\n';
+	
+	cout << "Cantidad de giros: " << cgiros <<'\n';
+	
+	imprimirStringConColor("===========================Paridad=======================",7); cout << '\n';
+	
+	
+	cout << "\nPorcentaje de impares: " << (cImpares * 100.0) / cgiros; 
+	cout << "\nPorcentaje de pares: " << (cPares * 100.0) / cgiros << '\n';
+	
+	imprimirStringConColor("==============================COLOR======================",7); cout << '\n';
+	
+	imprimirStringConColor("Rojos:",1); cout << ' ' << cRojos << '\n';
+	imprimirStringConColor("Negros:",2); cout << ' ' << cNegros << '\n';
+	
+	
+}
+	
+	
 
 /**
 * ****************************************************************************************
@@ -49,9 +88,12 @@ void MostratHistorial(){
 
 void MenuPrincipal(Jugador jugadores[], int &cant){
 	char op;
+	
+	bool isSessionPlayed=0;
+	
 	int sesionActual=-1;
 	int ultimaSesion=-1;
-	Sesion sesiones[5];
+	Sesion sesionGuardada;
 	
 	Numero ruleta[37];
 	inicializarRuleta(ruleta);
@@ -63,7 +105,7 @@ void MenuPrincipal(Jugador jugadores[], int &cant){
 		cin >> op;
 		switch(op){
 			case '1':
-				if(sesionActual==-1){
+				if(!isSessionPlayed){
 					condicionDeCiclo=1;
 					
 					Sesion nuevaSesion;
@@ -73,39 +115,44 @@ void MenuPrincipal(Jugador jugadores[], int &cant){
 					
 					
 					cicloDeJuego(ruleta,jugadores,cant,nuevaSesion,condicionDeCiclo);
-					if(condicionDeCiclo==3){
-						sesiones[sesionActual]=nuevaSesion;
-						sesionActual=-1;
-					}
+					
+					sesionGuardada=nuevaSesion;
+					isSessionPlayed=1;
 					
 				} else {
-					cout << "Ya hay una sesion en curso ï¿½Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
+					cout << "Ya hay una sesion en curso ¿Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
 					int opcion=-1;
 					while(opcion<1 or opcion>3){
 						cin >> opcion;
 						if(opcion==1){
 							condicionDeCiclo=1;
-							cicloDeJuego(ruleta,jugadores,cant,sesiones[sesionActual],condicionDeCiclo);
+							cicloDeJuego(ruleta,jugadores,cant,sesionGuardada,condicionDeCiclo);
 						}else if(opcion==3){
-							sesionActual=-1;
+							isSessionPlayed=1;
 						}
 					}
 				}
 				break;
 			case '2':
-				if(sesionActual!=-1){
-					mostrarEstadoJugadores(jugadores,cant);
+				if(isSessionPlayed){
+					mostrarEstadoJugadores(sesionGuardada.jugadoresParticipantes,cant);
+					cin.ignore();
+					cin.get();
 				}
 				break;
 			case '3':
-				if(sesionActual!=-1){
-					MostratHistorial();
+				if(isSessionPlayed){
+					MostratHistorial(sesionGuardada);
+					cin.ignore();
+					cin.get();
 				}
 				break;
 				
 			case '4':
-				if(sesionActual!=-1){
-					//MostrarEstadistaSesion();
+				if(isSessionPlayed){
+					MostrarEstadistaSesion(sesionGuardada);
+					cin.ignore();
+					cin.get();
 				}
 				break;
 			case '5':
