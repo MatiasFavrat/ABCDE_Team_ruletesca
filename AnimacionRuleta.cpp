@@ -15,7 +15,7 @@ const double PI = 3.1415;
 const double ASPECT = 2.0; // una celda de consola es ~2 veces mas alta que ancha
 
 const string CODIGO[] = {
-	"\033[48;5;22;38;5;231m",		   // FONDO 0
+	"\033[48;5;22;38;5;231m",  // FONDO 0
 	"\033[48;5;160;38;5;231m", // ROJO 1
 	"\033[48;5;16;38;5;231m",  // NEGRO 2
 	"\033[48;5;34;38;5;231m",  // VERDE (el cero) 3
@@ -367,14 +367,47 @@ void imprimirLienzo()
 	cout << salida;
 }
 
-void imprimirNumero(int n){
+/**
+ * ****************************************************************************************
+ * Función: imprimirNumero
+ *
+ * Parámetros:
+ * - int n : Valor numérico que se desea imprimir en la consola.
+ *
+ * Retorna:
+ * - void : No retorna ningún valor.
+ *
+ * Descripción:
+ * Imprime por la consola el número especificado aplicando el código de color correspondiente según sus propiedades mediante
+ * la función de color, y restablece el formato por defecto al finalizar.
+ * ****************************************************************************************
+ */
+
+void imprimirNumero(int n)
+{
 	cout << CODIGO[colorDe(n)] << " " << n << " " << CODIGO[0];
 }
 
-void imprimirStringConColor(string str ,int colorPaleta){
-	cout << CODIGO[colorPaleta]  << str << CODIGO[0];
-}	
-	
+/**
+ * ****************************************************************************************
+ * Función: imprimirStringConColor
+ *
+ * Parámetros:
+ * - string str : Cadena de caracteres o texto que se desea imprimir por pantalla.
+ * - int colorPaleta : Código numérico del color en la paleta que se aplicará al texto.
+ *
+ * Retorna:
+ * - void : No retorna ningún valor.
+ *
+ * Descripción:
+ * Imprime por la consola una cadena de texto aplicando un color específico extraído de la paleta y restablece el formato por defecto al finalizar.
+ * ****************************************************************************************
+ */
+
+void imprimirStringConColor(string str, int colorPaleta)
+{
+	cout << CODIGO[colorPaleta] << str << CODIGO[0];
+}
 
 // ---------- Giro con animacion ----------
 
