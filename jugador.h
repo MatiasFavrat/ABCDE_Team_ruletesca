@@ -71,8 +71,6 @@ void agregarApuesta(Jugador& j, Apuesta ap);
 
 void cargarJugadores(Jugador jugadores[], int &cant);
 
-
-
 */
 
 

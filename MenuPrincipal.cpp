@@ -134,6 +134,7 @@ void MostrarEstadistaSesion(Sesion &sesion)
 void MenuPrincipal(Jugador jugadores[], int &cant)
 {
 	char op;
+	char conf;
 
 	bool isSessionPlayed = 0;
 
@@ -223,6 +224,19 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 			cout << "Fucion en desarrollo...\n";
 			// CargarArchivo();
 			break;
+		case 'x': case 'X':
+			cout << "seguro? s/n : "; cin >> conf;
+			if(conf=='n' || conf=='N'){
+				op="o"
+			}
+			break;
+		default:
+			cout << "Error: Opcion no valida. Por favor, seleccione una opcion correcta." << endl;
+    		break;
 		}
+		
+
+		
+		
 	} while (op != 'x' && op != 'X');
 }

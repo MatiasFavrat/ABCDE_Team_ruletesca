@@ -38,6 +38,7 @@ void cargarJugadores(Jugador jugadores[], int &cant)
 		jugadores[i].derrotas = 0;
 	}
 }
+
 /*
 Funci�n: registrarApuesta
 
