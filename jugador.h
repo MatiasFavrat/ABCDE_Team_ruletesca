@@ -35,4 +35,46 @@ void liquidarApuestas(Jugador jugadores[], int cant, Numero resultado);
 void mostrarEstadoJugadores(Jugador jugadores[], int cant);
 bool hayJugadorEnQuiebra(Jugador jugadores[], int cant);
 
+
+/*
+
+Las siguentes funciones se encontraban en el jugador.h proporcionado por
+los profesores, creo que hay que codear solo 2...
+
+
+int getFichasJugadas(Apuesta a);
+int getNumeroApostado(Apuesta a);
+char getColorApostado(Apuesta a);
+int getTipoApuesta(Apuesta a);
+
+string getNombre(Jugador j);
+int getFichas(Jugador j);
+Apuesta getApuestaEnPosicion(Jugador j, int pos);
+int getTlApuestas(Jugador j);
+int getVictorias(Jugador j);
+int getDerrotas(Jugador j);
+
+
+void setFichasJugadas(Apuesta& a, int fichas);
+void setNumeroApostado(Apuesta& a, int numero);
+void setColorApostado(Apuesta& a, char color);
+void setTipoApuesta(Apuesta& a, int tipo);
+
+void setNombre(Jugador& j, string nombre);
+void setFichas(Jugador& j, int fichas);
+void setApuestaEnPosicion(Jugador& j, Apuesta ap, int pos);
+void setTlApuestas(Jugador& j, int tl);
+void setVictorias(Jugador& j, int victorias);
+void setDerrotas(Jugador& j, int derrotas);
+
+void agregarApuesta(Jugador& j, Apuesta ap);
+
+void cargarJugadores(Jugador jugadores[], int &cant);
+
+
+
+*/
+
+
+
 #endif
