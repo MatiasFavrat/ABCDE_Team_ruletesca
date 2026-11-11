@@ -31,8 +31,24 @@ void MostratHistorial(Sesion &sesion)
 	for (int i = 0; i < cgiros; i++)
 	{
 		int n = obtenerValor(sesion.Resultados[i]);
+        int paridad = obtenerParidad(sesion.Resultados[i]);
+
 		cout << "[" << i << "]:";
 		imprimirNumero(n);
+
+		if (n == 0)
+		{
+			cout << "Cero (Sin paridad)";
+		}
+		else if (paridad == 1)
+        {
+            cout << "Par";
+        }
+        else
+        {
+            cout << "Impar";
+        }
+
 		cout << endl;
 	}
 }
@@ -87,6 +103,8 @@ void MostrarEstadistaSesion(Sesion &sesion)
 			}
 		}
 	}
+
+
 	cout << '\n';
 	imprimirStringConColor("=========================================================", 4);
 	cout << '\n';
@@ -97,19 +115,27 @@ void MostrarEstadistaSesion(Sesion &sesion)
 
 	cout << "Cantidad de giros: " << cgiros << '\n';
 
-	imprimirStringConColor("===========================Paridad=======================", 7);
-	cout << '\n';
 
-	cout << "\nPorcentaje de impares: " << (cImpares * 100.0) / cgiros;
-	cout << "\nPorcentaje de pares: " << (cPares * 100.0) / cgiros << '\n';
+	if(cgiros>0){
+		imprimirStringConColor("===========================Paridad=======================", 7);
+		cout << '\n';
+		cout << "\nPorcentaje de impares: " << (cImpares * 100.0) / cgiros;
+		cout << "\nPorcentaje de pares: " << (cPares * 100.0) / cgiros ;
+		cout << "\nPorcentaje de ceros (0): " << (cZero * 100.0) / cgiros << "%\n";
 
-	imprimirStringConColor("==============================COLOR======================", 7);
-	cout << '\n';
+		imprimirStringConColor("==============================COLOR======================", 7);
+		cout << '\n';
+		imprimirStringConColor("Rojos:", 1);
+		cout << ' ' << cRojos << '\n';
+		imprimirStringConColor("Negros:", 2);
+		cout << ' ' << cNegros << '\n';
+		imprimirStringConColor("Verdes:", 3);
+		cout << ' ' << cZero << '\n';
+	}else{
+		cout << "Aun no se han realizado giros en esta sesion.\n";
+	}
 
-	imprimirStringConColor("Rojos:", 1);
-	cout << ' ' << cRojos << '\n';
-	imprimirStringConColor("Negros:", 2);
-	cout << ' ' << cNegros << '\n';
+	
 }
 
 /**
