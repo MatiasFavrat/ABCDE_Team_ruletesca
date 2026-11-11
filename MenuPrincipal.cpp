@@ -90,7 +90,8 @@ void MostrarEstadistaSesion(Sesion &sesion)
 	cout << '\n';
 	imprimirStringConColor("=========================================================", 4);
 	cout << '\n';
-	imprimirStringConColor("Estadisticas de la sesion", 4) << '\n';
+	imprimirStringConColor("Estadisticas de la sesion", 4) ;
+	cout << '\n';
 	imprimirStringConColor("=========================================================", 4);
 	cout << '\n';
 
@@ -227,7 +228,7 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 		case 'x': case 'X':
 			cout << "seguro? s/n : "; cin >> conf;
 			if(conf=='n' || conf=='N'){
-				op="o"
+				op='o';
 			}
 			break;
 		default:
