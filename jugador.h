@@ -49,6 +49,7 @@ int getTipoApuesta(Apuesta a);
 
 string getNombre(Jugador j);
 int getFichas(Jugador j);
+
 Apuesta getApuestaEnPosicion(Jugador j, int pos);
 int getTlApuestas(Jugador j);
 int getVictorias(Jugador j);

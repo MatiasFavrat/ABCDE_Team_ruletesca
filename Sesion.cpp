@@ -66,16 +66,17 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 	{	
 		for (int i = 0; i < cantidadJugadores; i++)
 		{
-			string nombre = getNombre(jugadores[i]);
-			int saldoActual = getFichas(jugadores[i]);
+			Jugador jugadorAct = jugadores[i];
+			string nombre = getNombre(jugadorAct);
+			int saldoActual = getFichas(jugadorAct);
 			int cantFichas;
 			
 			do {
-				cout << nombre << " inserte las fichas a apostar (Saldo disponible: " << jugadores[i].fichas << "): ";
+				cout << nombre << " inserte las fichas a apostar (Saldo disponible: " << saldoActual << "): ";
 				cin >> cantFichas;
 
 				if (cantFichas <= 0 || cantFichas > saldoActual) {
-					cout << "Error: Monto invalido. Debes apostar entre 1 y " << jugadores[i].fichas << " fichas.\n";
+					cout << "Error: Monto invalido. Debes apostar entre 1 y " << saldoActual << " fichas.\n";
 				}
 			} while (cantFichas <= 0 || cantFichas > saldoActual);
 

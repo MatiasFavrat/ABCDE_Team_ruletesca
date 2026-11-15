@@ -184,14 +184,14 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 			if (!isSessionPlayed)
 			{
 				condicionDeCiclo = 1;
-
+				
 				Sesion nuevaSesion;
 				ultimaSesion++;
 				sesionActual = ultimaSesion;
 				inicializarSesion(nuevaSesion, jugadores, cant);
-
+				
 				cicloDeJuego(ruleta, jugadores, cant, nuevaSesion, condicionDeCiclo);
-
+				
 				sesionGuardada = nuevaSesion;
 				isSessionPlayed = 1;
 			}
