@@ -1,7 +1,7 @@
 #ifndef ARCHIVO_H
 #define ARCHIVO_H
 	
-#include "sesion.h"
+#include "Sesion.h"
 	
 #define MAX_NOMBRE_ARCHIVO 50
 	
@@ -58,5 +58,11 @@ bool guardarSesiones(ptrNodo lista, const char *nombreArchivo);
 bool cargarSesiones(ptrNodo &lista, const char *nombreArchivo);
 
 void liberarLista(ptrNodo &lista);
+
+bool sesionValida(Sesion s);
+
+bool sesionArchivoValida(SesionArchivo s);
+
+void generarNombreArchivo(char *destino, int tam);
 
 #endif

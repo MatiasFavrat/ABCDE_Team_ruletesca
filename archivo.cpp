@@ -1,9 +1,10 @@
 #include "archivo.h"
-#include "sesion.h"
+#include "Sesion.h"
 #include "jugador.h"
 #include "numero.h"
 #include <fstream>
 #include <cstring>
+#include <ctime>
 	
 #include <iostream>
 using namespace std;
@@ -152,12 +153,78 @@ void liberarLista(ptrNodo &lista) {
 	}
 }
 
+/*
+Guarda todas las sesiones de la lista en el archivo binario
+(un registro por sesion). Devuelve false si no se pudo escribir.
+*/
 bool guardarSesiones(ptrNodo lista, const char *nombreArchivo) {
-
+	bool ok = true;
+	ofstream archivo(nombreArchivo, ios::binary | ios::trunc);
+	
+	if (!archivo) {
+		ok = false;
+	} else {
+		SesionArchivo *buffer = new SesionArchivo;
+		
+		while (ok && lista != NULL) {
+			if (sesionValida(lista->info)) {
+				convertirSesionArchivo(lista->info, *buffer);
+				archivo.write(reinterpret_cast<const char *>(buffer), sizeof(SesionArchivo));
+				if (!archivo) {
+					ok = false;
+				}
+			}
+			lista = lista->sig;
+		}
+		
+		delete buffer;
+		archivo.close();
+	}
+	
+	return ok;
 }
 
+/*
+Lee el archivo binario registro por registro y agrega cada sesion al final de la
+lista. Devuelve false si no se pudo abrir o si el contenido no es valido.
+*/
 bool cargarSesiones(ptrNodo &lista, const char *nombreArchivo) {
-
-
+	bool ok = true;
+	ifstream archivo(nombreArchivo, ios::binary);
+	
+	if (!archivo) {
+		ok = false;
+	} else {
+		SesionArchivo *buffer = new SesionArchivo;
+		Sesion *sesion = new Sesion;
+		
+		while (ok && archivo.read(reinterpret_cast<char *>(buffer), sizeof(SesionArchivo))) {
+			if (sesionArchivoValida(*buffer)) {
+				convertirSesion(*buffer, *sesion);
+				agregarSesionAlFinal(lista, *sesion);
+			} else {
+				ok = false;
+			}
+		}
+		
+		// si sobraron bytes el archivo esta incompleto
+		if (ok && archivo.gcount() > 0) {
+			ok = false;
+		}
+		
+		delete sesion;
+		delete buffer;
+		archivo.close();
+	}
+	
+	return ok;
 }
 
+/*
+Arma el nombre AAAA-MM-DD-HH-MM-SS.bin con la fecha y hora actual.
+*/
+void generarNombreArchivo(char *destino, int tam) {
+	time_t ahora = time(NULL);
+	struct tm *t = localtime(&ahora);
+	strftime(destino, tam, "%Y-%m-%d-%H-%M-%S.bin", t);
+}

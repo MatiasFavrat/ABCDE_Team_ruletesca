@@ -33,9 +33,11 @@ void inicializarSesion(Sesion &sesion, Jugador jugadores[], int &cantidadJugador
 	cargarJugadores(jugadores, cantidadJugadores);
 	for (int i = 0; i < cantidadJugadores; i++)
 	{
-		sesion.jugadoresParticipantes[i] = jugadores[i];
+		sesion.jugadores[i] = jugadores[i];
 	}
-	sesion.cantidadGiros = 0;
+	sesion.idSesion = 0;
+	sesion.totalGiros = 0;
+	sesion.jugadoresSesion = cantidadJugadores;
 }
 
 /**
@@ -132,15 +134,15 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 		
 		cout << "NO VA MAS!" << endl;
 		Numero resultado = girarRuleta(ruleta);
-		sesionActual.Resultados[sesionActual.cantidadGiros] = resultado;
-		sesionActual.cantidadGiros++;
+		sesionActual.historial[sesionActual.totalGiros] = resultado;
+		sesionActual.totalGiros++;
 		
 		liquidarApuestas(jugadores, cantidadJugadores, resultado);
 		
 		
 		for (int i = 0; i < cantidadJugadores; i++)
 		{
-			sesionActual.jugadoresParticipantes[i] = jugadores[i];
+			sesionActual.jugadores[i] = jugadores[i];
 		}
 		
 		
@@ -153,6 +155,13 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 			cin.get();
 			ciclo = 3;
 		}
+		else if (sesionActual.totalGiros >= MAX_JUGADAS)
+		{
+			cout << "\n\nSe alcanzo el maximo de giros por sesion. La sesion finaliza.\nPresiona Enter para volver al menu principal.";
+			cin.ignore();
+			cin.get();
+			ciclo = 3;
+		}
 		else
 		{
 			cout << "Desean realizar el siguiente giro o finalizar la sesion.\n (1) Realizar el siguiente giro. \n (2) Pausar Sesion y volver al menu principal. \n(3) finaliz sesion.\n";
@@ -160,4 +169,53 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 		}
 	}
 	return ciclo;
+}
+
+/*
+Agrega una copia de la sesion al final de la lista.
+*/
+void agregarSesionAlFinal(ptrNodo &lista, const Sesion &sesion)
+{
+	ptrNodo nuevo = new Nodo;
+	nuevo->info = sesion;
+	nuevo->sig = NULL;
+
+	if (lista == NULL)
+	{
+		lista = nuevo;
+	}
+	else
+	{
+		ptrNodo aux = lista;
+		while (aux->sig != NULL)
+		{
+			aux = aux->sig;
+		}
+		aux->sig = nuevo;
+	}
+}
+
+int contarSesiones(ptrNodo lista)
+{
+	int n = 0;
+	while (lista != NULL)
+	{
+		n++;
+		lista = lista->sig;
+	}
+	return n;
+}
+
+int maxIdSesion(ptrNodo lista)
+{
+	int mayor = 0;
+	while (lista != NULL)
+	{
+		if (lista->info.idSesion > mayor)
+		{
+			mayor = lista->info.idSesion;
+		}
+		lista = lista->sig;
+	}
+	return mayor;
 }

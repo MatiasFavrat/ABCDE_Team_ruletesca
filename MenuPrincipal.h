@@ -6,15 +6,10 @@
 #include "Sesion.h"
 
 void MenuPrincipal(Jugador jugadores[], int &cant); //MP
-bool IniciarNSesion(bool &InicioSesion, Jugador jugadores[], int &cant); //1
 void MostratHistorial(Sesion &sesion); //3
 void MostrarEstadistaSesion(Sesion &sesion); //4
-void pedirApuestas(Jugador jugadores[], int cant);
-void JugarSesion(Jugador jugadores[], int cant, Numero ruleta[37], Numero historial[], int &totalGiros);
-
-
-// OrdSesionGiros()
-// AnalizarSesionHistoricas();
-// CargarArchivo();
+void OrdSesionGiros(ptrNodo lista); //5
+void AnalizarSesionHistoricas(ptrNodo lista); //6
+void CargarArchivo(ptrNodo &lista, char nombreArchivo[]); //7
 
 #endif

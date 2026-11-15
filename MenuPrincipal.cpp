@@ -6,6 +6,8 @@
 #include "AnimacionRuleta.h"
 #include "numero.h"
 
+#include "archivo.h"
+#include <cstring>
 #include <windows.h>
 
 /**
@@ -26,12 +28,12 @@
 
 void MostratHistorial(Sesion &sesion)
 {
-	int cgiros = sesion.cantidadGiros;
+	int cgiros = sesion.totalGiros;
 	cout << "Historial de resultados:\n";
 	for (int i = 0; i < cgiros; i++)
 	{
-		int n = obtenerValor(sesion.Resultados[i]);
-        int paridad = obtenerParidad(sesion.Resultados[i]);
+		int n = obtenerValor(sesion.historial[i]);
+        int paridad = obtenerParidad(sesion.historial[i]);
 
 		cout << "[" << i << "]:";
 		imprimirNumero(n);
@@ -74,11 +76,11 @@ void MostrarEstadistaSesion(Sesion &sesion)
 {
 	int cPares = 0, cImpares = 0, cRojos = 0, cNegros = 0, cZero = 0;
 
-	int cgiros = sesion.cantidadGiros;
+	int cgiros = sesion.totalGiros;
 	for (int i = 0; i < cgiros; i++)
 	{
-		Numero resultado = sesion.Resultados[i];
-		int valor = obtenerValor(sesion.Resultados[i]);
+		Numero resultado = sesion.historial[i];
+		int valor = obtenerValor(sesion.historial[i]);
 		if (valor == 0)
 		{
 			cZero++;
@@ -138,36 +140,305 @@ void MostrarEstadistaSesion(Sesion &sesion)
 	
 }
 
-/**
- * ****************************************************************************************
- * Funci�n: MenuPrincioal
- *
- * Par�metros:
- * - bool &InicioSesion : Referencia a un valor booleano que indica si se ha iniciado sesi�n o el estado de la misma.
- * - Jugador jugadores[] : Arreglo de objetos de tipo Jugador que almacena la informaci�n de los participantes.
- * - int &cant : Referencia a una variable entera que representa la cantidad actual de jugadores.
- *
- * Retorna:
- * - void : No retorna ning�n valor.
- *
- * Descripci�n:
- * Despliega el men� principal de la aplicaci�n "La Ruletesca" en la consola, permitiendo
- * al usuario navegar entre distintas opciones (como iniciar una nueva sesi�n, consultar
- * el estado de los jugadores, ver historiales y estad�sticas, entre otras) mediante un bucle
- * que se repite hasta que se selecciona la opci�n de salida.
- * ****************************************************************************************
- */
+/*
+Funcion: OrdSesionGiros (opcion 5)
+
+Parametros:
+- ptrNodo lista: Lista con las sesiones guardadas.
+
+Descripcion:
+Ordena las sesiones de menor a mayor segun totalGiros y las muestra con su
+numero de sesion. Se ordena un arreglo de punteros a los nodos, asi no hay que
+mover las sesiones (son muy pesadas) ni se altera el orden de la lista.
+*/
+void OrdSesionGiros(ptrNodo lista)
+{
+	int n = contarSesiones(lista);
+
+	if (n == 0)
+	{
+		cout << "\nNo hay sesiones cargadas.\n";
+	}
+	else
+	{
+		ptrNodo *v = new ptrNodo[n];
+		ptrNodo aux = lista;
+		for (int i = 0; i < n; i++)
+		{
+			v[i] = aux;
+			aux = aux->sig;
+		}
+
+		// insercion
+		for (int i = 1; i < n; i++)
+		{
+			ptrNodo x = v[i];
+			int j = i - 1;
+			while (j >= 0 && v[j]->info.totalGiros > x->info.totalGiros)
+			{
+				v[j + 1] = v[j];
+				j--;
+			}
+			v[j + 1] = x;
+		}
+
+		cout << "\nSesion\tTotal de giros\n";
+		for (int i = 0; i < n; i++)
+		{
+			cout << v[i]->info.idSesion << "\t" << v[i]->info.totalGiros << endl;
+		}
+		delete[] v;
+	}
+}
+
+// suma las fichas de todas las apuestas de un jugador
+int totalFichasApostadas(Jugador j)
+{
+	int total = 0;
+	for (int i = 0; i < getTlApuestas(j); i++)
+	{
+		total += getFichasJugadas(getApuestaEnPosicion(j, i));
+	}
+	return total;
+}
+
+void jugadorMasVictorias(ptrNodo lista)
+{
+	cout << "\nJugador con mas victorias por sesion\n";
+	while (lista != NULL)
+	{
+		Sesion *s = &lista->info;
+		int mejor = 0;
+		for (int i = 1; i < s->jugadoresSesion; i++)
+		{
+			if (s->jugadores[i].victorias > s->jugadores[mejor].victorias)
+			{
+				mejor = i;
+			}
+		}
+		cout << "Sesion " << s->idSesion << ": " << s->jugadores[mejor].nombre
+			 << " (" << s->jugadores[mejor].victorias << " victorias)" << endl;
+		lista = lista->sig;
+	}
+}
+
+void jugadorMasApostador(ptrNodo lista)
+{
+	cout << "\nJugador que mas fichas aposto por sesion\n";
+	while (lista != NULL)
+	{
+		Sesion *s = &lista->info;
+		int mejor = 0;
+		int maxFichas = totalFichasApostadas(s->jugadores[0]);
+		for (int i = 1; i < s->jugadoresSesion; i++)
+		{
+			int fichas = totalFichasApostadas(s->jugadores[i]);
+			if (fichas > maxFichas)
+			{
+				maxFichas = fichas;
+				mejor = i;
+			}
+		}
+		cout << "Sesion " << s->idSesion << ": " << s->jugadores[mejor].nombre
+			 << " (" << maxFichas << " fichas)" << endl;
+		lista = lista->sig;
+	}
+}
+
+void desgloseApuestas(ptrNodo lista)
+{
+	cout << "\nTipos de apuestas por sesion\n";
+	while (lista != NULL)
+	{
+		Sesion *s = &lista->info;
+		int cant[5] = {0, 0, 0, 0, 0}; // indices 1 a 4, igual que tipoApuesta
+		for (int i = 0; i < s->jugadoresSesion; i++)
+		{
+			for (int k = 0; k < s->jugadores[i].tlApuestas; k++)
+			{
+				int tipo = s->jugadores[i].apuestas[k].tipoApuesta;
+				if (tipo >= 1 && tipo <= 4)
+				{
+					cant[tipo]++;
+				}
+			}
+		}
+		cout << "Sesion " << s->idSesion << ": Numero " << cant[1] << " | Color " << cant[2]
+			 << " | Par " << cant[3] << " | Impar " << cant[4] << endl;
+		lista = lista->sig;
+	}
+}
+
+void rendimientoJugadores(ptrNodo lista)
+{
+	// como mucho hay MAX_JUGADORES nombres por cada sesion
+	int total = contarSesiones(lista) * MAX_JUGADORES;
+	string *nombres = new string[total];
+	double *acum = new double[total];
+	int *cantSesiones = new int[total];
+	int cant = 0;
+
+	while (lista != NULL)
+	{
+		for (int i = 0; i < lista->info.jugadoresSesion; i++)
+		{
+			Jugador j = lista->info.jugadores[i];
+			int partidas = j.victorias + j.derrotas;
+			double porcentaje = 0;
+			if (partidas > 0)
+			{
+				porcentaje = j.victorias * 100.0 / partidas;
+			}
+
+			int pos = 0;
+			while (pos < cant && nombres[pos] != j.nombre)
+			{
+				pos++;
+			}
+			if (pos == cant)
+			{
+				nombres[pos] = j.nombre;
+				acum[pos] = 0;
+				cantSesiones[pos] = 0;
+				cant++;
+			}
+			acum[pos] += porcentaje;
+			cantSesiones[pos]++;
+		}
+		lista = lista->sig;
+	}
+
+	cout << "\nJugador\t\tSesiones\tEfectividad promedio\n";
+	for (int i = 0; i < cant; i++)
+	{
+		cout << nombres[i] << "\t\t" << cantSesiones[i] << "\t\t" << acum[i] / cantSesiones[i] << "%" << endl;
+	}
+
+	delete[] nombres;
+	delete[] acum;
+	delete[] cantSesiones;
+}
+
+/*
+Funcion: AnalizarSesionHistoricas (opcion 6)
+
+Parametros:
+- ptrNodo lista: Lista con las sesiones guardadas.
+
+Descripcion:
+Muestra el submenu de analisis y llama a la funcion que corresponde.
+*/
+void AnalizarSesionHistoricas(ptrNodo lista)
+{
+	char op;
+	do
+	{
+		cout << "\nAnalisis de sesiones historicas\n1.- Jugador con mas victorias por sesion\n2.- Jugador que mas fichas aposto por sesion\n3.- Desglose de tipos de apuestas por sesion\n4.- Rendimiento general de los jugadores\n0.- Volver\nIngrese una opcion: ";
+		cin >> op;
+
+		if (op >= '1' && op <= '4' && lista == NULL)
+		{
+			cout << "No hay sesiones cargadas.\n";
+		}
+		else
+		{
+			switch (op)
+			{
+			case '1':
+				jugadorMasVictorias(lista);
+				break;
+			case '2':
+				jugadorMasApostador(lista);
+				break;
+			case '3':
+				desgloseApuestas(lista);
+				break;
+			case '4':
+				rendimientoJugadores(lista);
+				break;
+			case '0':
+				break;
+			default:
+				cout << "Error: Opcion no valida.\n";
+				break;
+			}
+		}
+	} while (op != '0');
+}
+
+/*
+Funcion: CargarArchivo (opcion 7)
+
+Parametros:
+- ptrNodo &lista: Lista donde se cargan las sesiones.
+- char nombreArchivo[]: Archivo donde se va a guardar al salir.
+
+Descripcion:
+Pide el nombre del archivo binario y carga sus sesiones en la lista. Si ya habia
+sesiones en memoria las reemplaza (pide confirmacion). Si se pudo cargar, ese
+archivo pasa a ser el que se usa para guardar al cerrar el programa.
+*/
+void CargarArchivo(ptrNodo &lista, char nombreArchivo[])
+{
+	char ruta[100];
+	char conf = 's';
+
+	cout << "Ingrese el nombre del archivo a cargar: ";
+	cin >> ruta;
+
+	if (lista != NULL)
+	{
+		cout << "Se van a reemplazar las sesiones que hay en memoria, continuar? s/n: ";
+		cin >> conf;
+	}
+
+	if (conf == 's' || conf == 'S')
+	{
+		ptrNodo nueva = NULL;
+		if (cargarSesiones(nueva, ruta))
+		{
+			liberarLista(lista);
+			lista = nueva;
+			strcpy(nombreArchivo, ruta);
+			cout << "Se cargaron " << contarSesiones(lista) << " sesiones.\n";
+		}
+		else
+		{
+			liberarLista(nueva);
+			cout << "Error: no se pudo leer el archivo.\n";
+		}
+	}
+}
+
+/*
+Funcion: MenuPrincipal
+
+Parametros:
+- Jugador jugadores[]: Jugadores de la sesion en curso.
+- int &cant: Cantidad de jugadores.
+
+Descripcion:
+Muestra el menu principal de La Ruletesca hasta que se elige salir. Las sesiones
+terminadas se guardan en una lista enlazada y al salir se vuelcan al archivo
+binario (el que se cargo, o uno nuevo con la fecha y hora si no se cargo ninguno).
+*/
 
 void MenuPrincipal(Jugador jugadores[], int &cant)
 {
 	char op;
 	char conf;
 
-	bool isSessionPlayed = 0;
+	bool isSessionPlayed = false;
+	bool sesionTerminada = false; // la sesion actual ya esta en la lista
 
-	int sesionActual = -1;
-	int ultimaSesion = -1;
-	Sesion sesionGuardada;
+	ptrNodo lista = NULL;
+	char nombreArchivo[100];
+	generarNombreArchivo(nombreArchivo, 100);
+
+	// Sesion es muy grande para tenerla en el stack
+	Sesion *sesionGuardada = new Sesion;
+	sesionGuardada->totalGiros = 0;
+	sesionGuardada->jugadoresSesion = 0;
 
 	Numero ruleta[37];
 	inicializarRuleta(ruleta);
@@ -176,48 +447,58 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 	do
 	{
 		system("cls");
-		cout << "La Ruletesca\n==========================\n1.- Iniciar nueva sesion de ruleta\n2.- Consultar estado de jugadores\n3.- Mostrar historial de giros\n4.- Mostrar estadasticas de la sesion\n5.- Ordenar sesiones segun cantidad de giros (Funcionalidad en Desarrollo)\n6.- Analizar sesiones historicas (Funcionalidad en Desarrollo)\n7.- Carga de Archivo (Funcionalidad en Desarrollo)\nX.- Salir de la aplicacion\nIngrese una opcion: ";
+		cout << "La Ruletesca\n==========================\n1.- Iniciar nueva sesion de ruleta\n2.- Consultar estado de jugadores\n3.- Mostrar historial de giros\n4.- Mostrar estadasticas de la sesion\n5.- Ordenar sesiones segun cantidad de giros\n6.- Analizar sesiones historicas\n7.- Carga de Archivo\nX.- Salir de la aplicacion\nIngrese una opcion: ";
 		cin >> op;
 		switch (op)
 		{
 		case '1':
-			if (!isSessionPlayed)
+		{
+			bool jugar = false;
+			if (!isSessionPlayed || sesionTerminada)
 			{
-				condicionDeCiclo = 1;
-				
-				Sesion nuevaSesion;
-				ultimaSesion++;
-				sesionActual = ultimaSesion;
-				inicializarSesion(nuevaSesion, jugadores, cant);
-				
-				cicloDeJuego(ruleta, jugadores, cant, nuevaSesion, condicionDeCiclo);
-				
-				sesionGuardada = nuevaSesion;
-				isSessionPlayed = 1;
+				delete sesionGuardada;
+				sesionGuardada = new Sesion;
+				inicializarSesion(*sesionGuardada, jugadores, cant);
+				sesionGuardada->idSesion = maxIdSesion(lista) + 1;
+				isSessionPlayed = true;
+				sesionTerminada = false;
+				jugar = true;
 			}
 			else
 			{
-				cout << "Ya hay una sesion en curso �Desea continuarla donde la dejo? \n(1) Continuar sesion.\n (2) Cancelar. \n(3) Finalizar sesion.\n";
+				cout << "Ya hay una sesion en curso, desea continuarla donde la dejo? \n(1) Continuar sesion.\n(2) Cancelar.\n(3) Finalizar sesion.\n";
 				int opcion = -1;
 				while (opcion < 1 or opcion > 3)
 				{
 					cin >> opcion;
 					if (opcion == 1)
 					{
-						condicionDeCiclo = 1;
-						cicloDeJuego(ruleta, jugadores, cant, sesionGuardada, condicionDeCiclo);
+						jugar = true;
 					}
 					else if (opcion == 3)
 					{
-						isSessionPlayed = 1;
+						agregarSesionAlFinal(lista, *sesionGuardada);
+						sesionTerminada = true;
 					}
 				}
 			}
+
+			if (jugar)
+			{
+				condicionDeCiclo = 1;
+				cicloDeJuego(ruleta, jugadores, cant, *sesionGuardada, condicionDeCiclo);
+				if (condicionDeCiclo == 3)
+				{
+					agregarSesionAlFinal(lista, *sesionGuardada);
+					sesionTerminada = true;
+				}
+			}
 			break;
+		}
 		case '2':
 			if (isSessionPlayed)
 			{
-				mostrarEstadoJugadores(sesionGuardada.jugadoresParticipantes, cant);
+				mostrarEstadoJugadores(sesionGuardada->jugadores, sesionGuardada->jugadoresSesion);
 				cin.ignore();
 				cin.get();
 			}
@@ -225,7 +506,7 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 		case '3':
 			if (isSessionPlayed)
 			{
-				MostratHistorial(sesionGuardada);
+				MostratHistorial(*sesionGuardada);
 				cin.ignore();
 				cin.get();
 			}
@@ -234,22 +515,23 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 		case '4':
 			if (isSessionPlayed)
 			{
-				MostrarEstadistaSesion(sesionGuardada);
+				MostrarEstadistaSesion(*sesionGuardada);
 				cin.ignore();
 				cin.get();
 			}
 			break;
 		case '5':
-			cout << "Fucion en desarrollo...\n";
-			// OrdSesionGiros();
+			OrdSesionGiros(lista);
+			cin.ignore();
+			cin.get();
 			break;
 		case '6':
-			cout << "Fucion en desarrollo...\n";
-			// AnalizarSesionHistoricas();
+			AnalizarSesionHistoricas(lista);
 			break;
 		case '7':
-			cout << "Fucion en desarrollo...\n";
-			// CargarArchivo();
+			CargarArchivo(lista, nombreArchivo);
+			cin.ignore();
+			cin.get();
 			break;
 		case 'x': case 'X':
 			cout << "seguro? s/n : "; cin >> conf;
@@ -261,9 +543,24 @@ void MenuPrincipal(Jugador jugadores[], int &cant)
 			cout << "Error: Opcion no valida. Por favor, seleccione una opcion correcta." << endl;
     		break;
 		}
-		
 
-		
-		
 	} while (op != 'x' && op != 'X');
+
+	// si quedo una sesion pausada, tambien se guarda
+	if (isSessionPlayed && !sesionTerminada && sesionGuardada->totalGiros > 0)
+	{
+		agregarSesionAlFinal(lista, *sesionGuardada);
+	}
+
+	if (guardarSesiones(lista, nombreArchivo))
+	{
+		cout << "Sesiones guardadas en " << nombreArchivo << endl;
+	}
+	else
+	{
+		cout << "Error: no se pudo guardar el archivo " << nombreArchivo << endl;
+	}
+
+	liberarLista(lista);
+	delete sesionGuardada;
 }
