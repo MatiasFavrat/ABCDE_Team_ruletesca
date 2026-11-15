@@ -222,3 +222,12 @@ bool hayJugadorEnQuiebra(Jugador jugadores[], int cant)
 
 	return quiebra;
 }
+
+
+string getNombre(Jugador j){
+	return j.nombre;
+}
+
+int getFichas(Jugador j){
+	return j.fichas;
+}

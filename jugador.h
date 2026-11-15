@@ -40,7 +40,7 @@ bool hayJugadorEnQuiebra(Jugador jugadores[], int cant);
 
 Las siguentes funciones se encontraban en el jugador.h proporcionado por
 los profesores, creo que hay que codear solo 2...
-
+*/
 
 int getFichasJugadas(Apuesta a);
 int getNumeroApostado(Apuesta a);
@@ -71,7 +71,7 @@ void agregarApuesta(Jugador& j, Apuesta ap);
 
 void cargarJugadores(Jugador jugadores[], int &cant);
 
-*/
+
 
 
 

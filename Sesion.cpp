@@ -63,20 +63,21 @@ void inicializarSesion(Sesion &sesion, Jugador jugadores[], int &cantidadJugador
 int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Sesion &sesionActual, int &ciclo)
 {
 	while (ciclo == 1)
-	{
+	{	
 		for (int i = 0; i < cantidadJugadores; i++)
 		{
-			string nombre = jugadores[i].nombre;
-			cout << nombre << " inserte las fichas a apostar:";
+			string nombre = getNombre(jugadores[i]);
+			int saldoActual = getFichas(jugadores[i]);
 			int cantFichas;
 			
 			do {
 				cout << nombre << " inserte las fichas a apostar (Saldo disponible: " << jugadores[i].fichas << "): ";
 				cin >> cantFichas;
-				if (cantFichas <= 0 || cantFichas > jugadores[i].fichas) {
+
+				if (cantFichas <= 0 || cantFichas > saldoActual) {
 					cout << "Error: Monto invalido. Debes apostar entre 1 y " << jugadores[i].fichas << " fichas.\n";
 				}
-			} while (cantFichas <= 0 || cantFichas > jugadores[i].fichas);
+			} while (cantFichas <= 0 || cantFichas > saldoActual);
 
 			int numero = 0;
 			char color = 'V';
