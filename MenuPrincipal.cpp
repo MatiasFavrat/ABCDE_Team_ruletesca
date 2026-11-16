@@ -10,8 +10,8 @@
 #include <cstring>
 #include <windows.h>
 
-/**
- * ****************************************************************************************
+/******************************************************************************************
+ * 
  * FunciÃ³n: MostratHistorial
  *
  * ParÃ¡metros:
@@ -23,8 +23,8 @@
  * DescripciÃ³n:
  * Obtiene la cantidad de giros registrados en la sesiÃ³n y recorre el arreglo de resultados para imprimir por consola cada nÃºmero
  * histÃ³rico con su respectivo Ã­ndice y formato de presentaciÃ³n.
- * ****************************************************************************************
- */
+ * 
+ *****************************************************************************************/
 
 void MostratHistorial(Sesion &sesion)
 {
@@ -140,7 +140,7 @@ void MostrarEstadistaSesion(Sesion &sesion)
 	
 }
 
-/*
+/**
 Funcion: OrdSesionGiros (opcion 5)
 
 Parametros:
@@ -191,7 +191,16 @@ void OrdSesionGiros(ptrNodo lista)
 	}
 }
 
-// suma las fichas de todas las apuestas de un jugador
+/****************************************************
+- Función: totalFichasApostadas
+- Parámetros:
+- - Jugador j : Estructura con los datos y el historial de apuestas del jugador
+- Retorna:
+- - int : Cantidad total de fichas apostadas por el jugador
+- Descripción:
+- Recorre secuencialmente todas las apuestas realizadas por el jugador mediante su
+tamaño lógico y acumula el valor de fichas jugadas en cada una.
+****************************************************/
 int totalFichasApostadas(Jugador j)
 {
 	int total = 0;
@@ -202,6 +211,17 @@ int totalFichasApostadas(Jugador j)
 	return total;
 }
 
+/****************************************************
+- Función: jugadorMasVictorias
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - void : No devuelve valor (imprime los resultados por consola)
+- Descripción:
+- Recorre la lista enlazada de sesiones. En cada sesión realiza una búsqueda del
+máximo sobre el arreglo de jugadores comparando sus victorias para identificar y
+mostrar al ganador.
+****************************************************/
 void jugadorMasVictorias(ptrNodo lista)
 {
 	cout << "\nJugador con mas victorias por sesion\n";
@@ -217,11 +237,21 @@ void jugadorMasVictorias(ptrNodo lista)
 			}
 		}
 		cout << "Sesion " << s->idSesion << ": " << s->jugadores[mejor].nombre
-			 << " (" << s->jugadores[mejor].victorias << " victorias)" << endl;
+			<< " (" << s->jugadores[mejor].victorias << " victorias)" << endl;
 		lista = lista->sig;
 	}
 }
 
+/****************************************************
+- Función: jugadorMasApostador
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - void : No devuelve valor (imprime los resultados por consola)
+- Descripción:
+- Recorre cada nodo de la lista de sesiones y aplica una búsqueda del máximo calculando el total de fichas apostadas
+por cada jugador (mediante totalFichasApostadas) para mostrar quién apostó más en cada sesión.
+****************************************************/
 void jugadorMasApostador(ptrNodo lista)
 {
 	cout << "\nJugador que mas fichas aposto por sesion\n";
@@ -240,11 +270,22 @@ void jugadorMasApostador(ptrNodo lista)
 			}
 		}
 		cout << "Sesion " << s->idSesion << ": " << s->jugadores[mejor].nombre
-			 << " (" << maxFichas << " fichas)" << endl;
+			<< " (" << maxFichas << " fichas)" << endl;
 		lista = lista->sig;
 	}
 }
 
+/****************************************************
+- Función: desgloseApuestas
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - void : No devuelve valor (imprime los resultados por consola)
+- Descripción:
+- Recorre cada sesión e inicializa un arreglo de contadores por categoría (1 a 4).
+Luego itera sobre todos los jugadores y sus apuestas incrementando el contador
+correspondiente a cada tipo de apuesta y muestra el resumen de la sesión.
+****************************************************/
 void desgloseApuestas(ptrNodo lista)
 {
 	cout << "\nTipos de apuestas por sesion\n";
@@ -264,11 +305,22 @@ void desgloseApuestas(ptrNodo lista)
 			}
 		}
 		cout << "Sesion " << s->idSesion << ": Numero " << cant[1] << " | Color " << cant[2]
-			 << " | Par " << cant[3] << " | Impar " << cant[4] << endl;
+			<< " | Par " << cant[3] << " | Impar " << cant[4] << endl;
 		lista = lista->sig;
 	}
 }
 
+/****************************************************
+- Función: rendimientoJugadores
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - void : No devuelve valor (imprime una tabla comparativa por consola)
+- Descripción:
+- Reserva arreglos dinámicos paralelos para agrupar jugadores únicos por nombre. 
+Recorre todas las sesiones calculando el porcentaje de victorias por sesión de cada jugador,
+acumula sus resultados, imprime la efectividad promedio global y libera la memoria dinámica al finalizar.
+****************************************************/
 void rendimientoJugadores(ptrNodo lista)
 {
 	// como mucho hay MAX_JUGADORES nombres por cada sesion
@@ -277,7 +329,7 @@ void rendimientoJugadores(ptrNodo lista)
 	double *acum = new double[total];
 	int *cantSesiones = new int[total];
 	int cant = 0;
-
+	
 	while (lista != NULL)
 	{
 		for (int i = 0; i < lista->info.jugadoresSesion; i++)
@@ -289,7 +341,7 @@ void rendimientoJugadores(ptrNodo lista)
 			{
 				porcentaje = j.victorias * 100.0 / partidas;
 			}
-
+			
 			int pos = 0;
 			while (pos < cant && nombres[pos] != j.nombre)
 			{
@@ -307,19 +359,19 @@ void rendimientoJugadores(ptrNodo lista)
 		}
 		lista = lista->sig;
 	}
-
+	
 	cout << "\nJugador\t\tSesiones\tEfectividad promedio\n";
 	for (int i = 0; i < cant; i++)
 	{
 		cout << nombres[i] << "\t\t" << cantSesiones[i] << "\t\t" << acum[i] / cantSesiones[i] << "%" << endl;
 	}
-
+	
 	delete[] nombres;
 	delete[] acum;
 	delete[] cantSesiones;
 }
 
-/*
+/**
 Funcion: AnalizarSesionHistoricas (opcion 6)
 
 Parametros:
@@ -366,7 +418,7 @@ void AnalizarSesionHistoricas(ptrNodo lista)
 	} while (op != '0');
 }
 
-/*
+/**
 Funcion: CargarArchivo (opcion 7)
 
 Parametros:

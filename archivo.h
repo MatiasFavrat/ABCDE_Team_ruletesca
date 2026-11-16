@@ -5,7 +5,7 @@
 	
 #define MAX_NOMBRE_ARCHIVO 50
 	
-	struct ApuestaArchivo {
+struct ApuestaArchivo {
 	int fichasJugadas;
 	int numeroApostado;
 	char colorApostado;

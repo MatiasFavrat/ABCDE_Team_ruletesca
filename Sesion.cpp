@@ -171,15 +171,23 @@ int cicloDeJuego(Numero ruleta[], Jugador jugadores[], int cantidadJugadores, Se
 	return ciclo;
 }
 
-/*
-Agrega una copia de la sesion al final de la lista.
-*/
+/****************************************************
+- Función: agregarSesionAlFinal
+- Parámetros:
+- - ptrNodo &lista : Referencia al puntero inicial de la lista enlazada de sesiones
+- - const Sesion &sesion : Referencia constante a la estructura de sesión que se desea insertar
+- Retorna:
+- - void : No devuelve valor (modifica la lista enlazada directamente)
+- Descripción:
+- Reserva memoria dinámica para un nuevo nodo copiando los datos de la sesión. Si la lista está vacía lo asigna como primer elemento;
+de lo contrario, recorre la lista hasta el último nodo y lo enlaza al final.
+****************************************************/
 void agregarSesionAlFinal(ptrNodo &lista, const Sesion &sesion)
 {
 	ptrNodo nuevo = new Nodo;
 	nuevo->info = sesion;
 	nuevo->sig = NULL;
-
+	
 	if (lista == NULL)
 	{
 		lista = nuevo;
@@ -195,6 +203,15 @@ void agregarSesionAlFinal(ptrNodo &lista, const Sesion &sesion)
 	}
 }
 
+/****************************************************
+- Función: contarSesiones
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - int : Cantidad total de nodos (sesiones) almacenados en la lista
+- Descripción:
+- Recorre secuencialmente todos los nodos de la lista enlazada desde el inicio hasta alcanzar NULL, incrementando un contador por cada nodo visitado.
+****************************************************/
 int contarSesiones(ptrNodo lista)
 {
 	int n = 0;
@@ -206,6 +223,15 @@ int contarSesiones(ptrNodo lista)
 	return n;
 }
 
+/****************************************************
+- Función: maxIdSesion
+- Parámetros:
+- - ptrNodo lista : Puntero al inicio de la lista enlazada de sesiones
+- Retorna:
+- - int : El identificador (idSesion) más alto encontrado en la lista, o 0 si está vacía
+- Descripción:
+- Realiza una búsqueda del máximo recorriendo toda la lista enlazada y comparando el campo idSesion de cada nodo contra el mayor valor registrado hasta el momento.
+****************************************************/
 int maxIdSesion(ptrNodo lista)
 {
 	int mayor = 0;

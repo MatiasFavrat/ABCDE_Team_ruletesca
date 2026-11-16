@@ -3,7 +3,7 @@
 #include "ruleta.h"
 #include "AnimacionRuleta.h"
 
-/*
+/***
 * Funcion: inicializarRuleta
 * 
 * Parametros:
@@ -26,7 +26,7 @@ void inicializarRuleta(Numero ruleta[37]){
 	srand(time(NULL));
 }
 	
-/*
+/**
 * Funcion: girarRuleta
 * 
 * Parametros:
